@@ -2,6 +2,14 @@
 
 This project presents a novel language at a high-level of abstraction to build serverless workflows applications (Function Choreographies - *FCs*). 
 
+*AFCL* is the language that each component of the overall [AFCL Environment](https://github.com/sashkoristov/AFCLEnvironment) uses and understands.
+
+You can build an FC using:
+* Any YAML-based editor 
+* [FC Editor](http://fceditor.dps.uibk.ac.at:8180/)
+* [AFCLCore](./AFCLCore/afclCore.jar) in JAVA program
+
+
 ## General overview of AFCL
 
 AFCL is based on YAML. An AFCL FC consists of functions, which can be either base functions or compound functions. The former refers to a single computational task without further splitting it into smaller tasks, while the latter encloses some base functions or even nested compound functions. All base and compound functions can be connected by different control- and data-flow constructs. An FC is also a compound function. In order to create an FC, all its functions (base and compound) as well as control- and data- flow connections among them, must be specified. In order to facilitate optimized execution of FCs, a user optionally can specify properties and constraints for functions and data-flow connections. 
@@ -95,8 +103,58 @@ function: {
 }
 ````
 
+## Invocation type
+
+The `invoke-type` is a built-in `Property` defined in *AFCL*. This `Property` can be used to specify whether a base function should run asynchronously (ASYNC) or synchronously (SYNC). An invoker of a synchronous function waits for the function to finish (if the function has output data then until the data arrived). With asynchronous invocation, the function will be queued without waiting for the function to be finished. For example, the runtime system can invoke a synchronous ”checker” function periodically to examine whether the output of an asynchronous function is stored in a specified storage (e.g. S3). By default, if the invoke-type property is defined within a compound function, all nested base functions within that compound function will inherit this property and are invoked with the specified invoke-type. Otherwise, the base function will be invoked as specified invoke-type property. If ASYNC is specified, the FC designer must guarantee that the FC still operates correctly. Without specifying any invoke-type in any of the parent compound functions, the base functions are executed synchronously in AFCL. The build-in function asyncHandler is used to handle ASYNC invoked functions. This function can be used the same way as a base function is used, while the type field specifies that it is a build-in function. The build-in function has one input parameter, representing a coma separated list of names of ASYNC invoked functions (e.g. FunctionName1) and one boolean output parameter which represents whether all of these invoked functions finished. asyncHandler can be invoked with invoke-type i) ASYNC, meaning that asyncHandler immediately returns with the output parameter set to true if all functions (specified in the input parameter) finished otherwise it is set to false, or ii) SYNC, meaning that asyncHandler waits for all functions (specified in the input parameter) to finish before it returns.
+
+## Base function
+
+````yaml
+function: {
+  name: "name", type: "type",
+  dataIns: [{}+]?,
+  properties: [
+    {
+      name: "invoke-type",
+      value: "ASYNC | SYNC"
+    }+
+  ]?,
+  dataOuts: [{}+ ]?
+}
+````
+
+
+## Cmpound function
+
+````yaml
+function: {
+  name: "name", type: "build-in:asyncHandler",
+  dataIns: [
+    { 
+      name: "name", type: "collection",
+      value: "FunctionName1,FunctionName2,...,FunctionNameN" 
+	}+
+  ],
+  properties: [
+    {
+      name: "invoke-type",
+      value: "ASYNC | SYNC"
+    }+
+  ]?,
+  dataOuts: [
+    { 
+      name: "name", type: "boolean" 
+	}+
+  ]
+}
+````
+
+
+# More details 
+
 More details will follow very soon ...
-Still, details regarding AFCL can be found in the following publications.
+
+Still, details regarding *AFCL* can be found in the following publications.
 
 ----
 
@@ -104,7 +162,7 @@ Still, details regarding AFCL can be found in the following publications.
 
 
 ````
-@article{ristov114afcl,
+@article{ristovAFCL:2020,
 
   title={AFCL: An Abstract Function Choreography Language for serverless workflow specification},
 
@@ -122,3 +180,8 @@ Still, details regarding AFCL can be found in the following publications.
 
 }
 ````
+
+# Support
+
+If you need any additional information, please do not hesitate to contact sashko@dps.uibk.ac.at.
+
