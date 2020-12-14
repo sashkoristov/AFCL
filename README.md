@@ -12,11 +12,13 @@ In order to simplify the reading of AFCL specifications, we use meta-syntax whic
 ## Base functions
 
 A base function represents a computational or data processing task. The name of a function serves as a unique identifier. Functions are described by type - *Function Types* (FTs) which are abstract descriptions of their corresponding *function implementations* (FIs). An FI represents an actual implementation of an FT. 
-The FIs of the same function type are semantically equivalent, but may expose different performance or cost behavior or may be implemented with different programming languages, etc. FTs shield implementation details from the FC developer. The selection of a specific FI for an FT is done by an underlying runtime system.
+The FIs of the same function type are semantically equivalent, but may expose different performance or cost behavior or may be implemented with different programming languages, etc. FTs shield implementation details from the FC developer. 
 
-Finally, a single FI may be deployed on mulitple regions of a single FaaS system or assigned with different RAM memory. We are using the term *function deployment* (*FD*) for each deployment of a single function implementations. 
+Finally, a single FI may be deployed on mulitple regions of a single FaaS system or assigned with different RAM memory. We are using the term *function deployment* (*FD*) for each deployment of a single function implementation. 
 
 This means that one FT may have multiple FIs, each of which may have multiple FDs.
+
+The selection of a specific FD for an FT is done by an underlying runtime system *xAFLC*.
 
 
 ````yaml
@@ -56,7 +58,7 @@ We omit name, type, source, value, and saveto in definitions for simplicity. Ins
 
 AFCL introduces a rich set of control-flow constructs (compound functions) to simplify the specification of realistic FCs that are difficult to be composed with any current FC system without support by a skilled software developer. Compound functions contain inner functions, which can be base or compound and they are executed in the order defined by the compound function. An inner function of a compound function fi can be another compound or base function fj . 
 
-AFCL introduces the following compound functions: `sequence`, `if-then-else`, `switch`, `for`, `while`, `parallel`, and `parallelFor`. The specifications for the name attribute, dataIns and dataOuts ports, along with the corresponding source and saveto attributes are similar as for a base function. 
+AFCL introduces the following compound functions: [`sequence`](./compound/sequence.md), [`if-then-else`](./compound/if.md), [`switch`](./compound/switch.md), [`for`](./compound/for.md), [`while`](./compound/while.md), [`parallel`](./compound/parallel.md), and [`parallelFor`](./compound/parallelFor.md). The specifications for the name attribute, dataIns and dataOuts ports, along with the corresponding source and saveto attributes are similar as for a base function. 
 
 When we use the term function, it can refer to either base function or compound function.
 
@@ -94,20 +96,29 @@ function: {
 ````
 
 More details will follow very soon ...
-Still, details regarding AFCL can be found in the following publiscations.
+Still, details regarding AFCL can be found in the following publications.
 
 ----
 
 # Publications
 
 
-
+````
 @article{ristov114afcl,
+
   title={AFCL: An Abstract Function Choreography Language for serverless workflow specification},
+
   author={Ristov, Sasko and Pedratscher, Stefan and Fahringer, Thomas},
+
   journal={Future Generation Computer Systems},
+
   volume={114},
+
   pages={368--382},
+
   publisher={Elsevier},
+
   doi={https://doi.org/10.1016/j.future.2020.08.012}
+
 }
+````
