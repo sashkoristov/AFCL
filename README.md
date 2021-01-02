@@ -107,7 +107,7 @@ function: {
 
 ## Invocation type
 
-The `invoke-type` is a built-in `Property` defined in *AFCL*, both for [base](./invocation-type/base.md) and [compound](./invocation-type/compound) functions. 
+The `invoke-type` is a built-in `Property` defined in *AFCL*, both for [base](./invocation-type/base.md) and [compound](./invocation-type/compound.md) functions. 
 
 ````yaml
   properties: [
