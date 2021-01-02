@@ -118,6 +118,34 @@ The `invoke-type` is a built-in `Property` defined in *AFCL*, both for [base](./
   ]?,
 ````
 
+## The structure of an AFCL file
+
+*AFCL* introduces the Sub-Function-Choreography (`Sub-FC`), similar to a procedure in other high-level programming languages. It is used to modularise, encapsulate, and reuse a code region. Sub-FCs are organised in *AFCL* FCs such that the name of every Sub-FC is unique. Inside a Sub-FC, only data-flow among the Sub-FCs and its inner functions is allowed. Such a data-flow mechanism allows safe invocations of Sub-FCs anywhere in the enclosing FC. A Sub-FC in an FC is not visible outside of the FC.
+
+````yaml
+subFCs: {
+1: name: "name",
+2: dataIns: [{}+]?,
+3: subFCBody: 
+    [{function: {}}+],
+4: dataOuts: [{}+]?
+}
+````
+
+The invocation of Sub-FCs is done similarly. If a base function *f* in an FC has a type referring to a Sub-FC defined in the FC, executing *f* invokes the corresponding Sub-FC.
+
+````yaml
+{
+---
+1: name: "name",
+2: subFCs: [{name: "subFC1"}+]?,
+3: dataIns: [{}+]?,
+4: FCBody: [{function: {}}+],
+5: dataOuts: [{}+]?
+}
+````
+
+
 
 ----
 # More details 
